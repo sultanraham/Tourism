@@ -24,17 +24,24 @@ const DestinationCard = ({ destination }) => {
 
   useEffect(() => {
     if (!lat || !lng) return;
+    
+    // Elite Flow Control: Stagger requests to avoid 429 burst
+    const randomDelay = Math.floor(Math.random() * 2000); // 0-2s delay
+    
     const fetchWeather = async () => {
       try {
         const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,weathercode&timezone=Asia%2FKarachi`);
+        if (!res.ok) throw new Error('Throttled');
         const data = await res.json();
         setWeatherData(data.current);
       } catch (err) {
-        console.warn("Weather fetch failed for card:", name);
+        // Silent manifest failure to keep console clean
       }
     };
-    fetchWeather();
-  }, [lat, lng, name]);
+
+    const timer = setTimeout(fetchWeather, randomDelay);
+    return () => clearTimeout(timer);
+  }, [lat, lng]);
 
   const getWeatherIcon = (code) => {
     if (code === 0) return <Sun size={10} className="text-accent" />;
