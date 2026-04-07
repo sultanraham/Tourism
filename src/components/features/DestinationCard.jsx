@@ -25,7 +25,20 @@ const DestinationCard = ({ destination }) => {
   useEffect(() => {
     if (!lat || !lng) return;
     
-    // Elite Flow Control: Aggressive stagger for large grids (0-5s) to avoid 429
+    // Elite Intelligence Cache: Prevent 429 by checking local manifest first
+    const cacheKey = `weather_${name.replace(/\s+/g, '_')}`;
+    const cached = localStorage.getItem(cacheKey);
+    
+    if (cached) {
+      const { data, timestamp } = JSON.parse(cached);
+      // Cache valid for 30 minutes
+      if (Date.now() - timestamp < 1800000) {
+        setWeatherData(data);
+        return;
+      }
+    }
+    
+    // Aggressive stagger for large grids (0-5s) to avoid 429 burst
     const randomDelay = Math.floor(Math.random() * 5000); 
     
     const fetchWeather = async () => {
@@ -34,6 +47,12 @@ const DestinationCard = ({ destination }) => {
         if (!res.ok) throw new Error('Throttled');
         const data = await res.json();
         setWeatherData(data.current);
+        
+        // Manifest to Cache
+        localStorage.setItem(cacheKey, JSON.stringify({
+          data: data.current,
+          timestamp: Date.now()
+        }));
       } catch (err) {
         // Silent manifest failure
       }
@@ -41,7 +60,7 @@ const DestinationCard = ({ destination }) => {
 
     const timer = setTimeout(fetchWeather, randomDelay);
     return () => clearTimeout(timer);
-  }, [lat, lng]);
+  }, [lat, lng, name]);
 
   const getWeatherIcon = (code) => {
     if (code === 0) return <Sun size={10} className="text-accent" />;

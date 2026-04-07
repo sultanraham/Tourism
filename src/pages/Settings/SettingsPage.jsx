@@ -40,7 +40,8 @@ const SettingsPage = () => {
                     id: user.id,
                     email: user.email,
                     full_name: formData.name, 
-                    avatar_url: formData.avatarUrl 
+                    avatar_url: formData.avatarUrl,
+                    updated_at: new Date().toISOString()
                 }, { onConflict: 'id' });
 
             if (profileError) throw profileError;
