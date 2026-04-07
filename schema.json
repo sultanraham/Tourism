@@ -1,0 +1,33 @@
+[
+  {
+    "table": "destinations",
+    "columns": [
+      "id",
+      "name",
+      "slug",
+      "province",
+      "category",
+      "rating_avg",
+      "difficulty",
+      "average_cost_pkr",
+      "ideal_duration",
+      "lat",
+      "lng",
+      "best_season",
+      "description",
+      "image",
+      "tags",
+      "image_url",
+      "images",
+      "is_visible"
+    ]
+  },
+  {
+    "table": "hotels",
+    "columns": []
+  },
+  {
+    "table": "restaurants",
+    "columns": []
+  }
+]
