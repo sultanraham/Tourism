@@ -25,8 +25,8 @@ const DestinationCard = ({ destination }) => {
   useEffect(() => {
     if (!lat || !lng) return;
     
-    // Elite Flow Control: Stagger requests to avoid 429 burst
-    const randomDelay = Math.floor(Math.random() * 2000); // 0-2s delay
+    // Elite Flow Control: Aggressive stagger for large grids (0-5s) to avoid 429
+    const randomDelay = Math.floor(Math.random() * 5000); 
     
     const fetchWeather = async () => {
       try {
@@ -35,7 +35,7 @@ const DestinationCard = ({ destination }) => {
         const data = await res.json();
         setWeatherData(data.current);
       } catch (err) {
-        // Silent manifest failure to keep console clean
+        // Silent manifest failure
       }
     };
 

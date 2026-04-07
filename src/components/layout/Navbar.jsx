@@ -207,13 +207,36 @@ const Navbar = () => {
             <div className="p-8 border-t border-white/5 bg-surface-2/40 backdrop-blur-2xl">
                {isAuthenticated ? (
                   <div className="flex flex-col gap-4">
-                    <Link to="/settings" onClick={() => setIsMobileMenuOpen(false)} className="w-full bg-surface-3 py-5 text-center text-[10px] font-black uppercase tracking-[0.4em] rounded-[2rem] border border-white/5 text-text-primary hover:bg-white/5 transition-all shadow-xl">Voyager Settings</Link>
-                    <button onClick={() => { logout(); setIsMobileMenuOpen(false); }} className="w-full bg-danger/5 py-5 text-center text-[10px] font-black uppercase tracking-[0.4em] text-danger rounded-[2rem] border border-danger/10 hover:bg-danger/10 transition-all font-bold">Manifest Logout</button>
+                    <Link 
+                      to="/settings" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="w-full bg-surface-3 py-[14px] text-center text-[10px] font-black uppercase tracking-[0.4em] rounded-2xl border border-white/5 text-text-primary hover:bg-white/5 transition-all shadow-xl"
+                    >
+                      Protocol Settings
+                    </Link>
+                    <button 
+                      onClick={() => { logout(); setIsMobileMenuOpen(false); }}
+                      className="w-full bg-danger/5 py-[14px] text-center text-[10px] font-black uppercase tracking-[0.4em] text-danger rounded-2xl border border-danger/10 hover:bg-danger/10 transition-all font-bold"
+                    >
+                      Sync Logout
+                    </button>
                   </div>
                ) : (
                   <div className="flex flex-col gap-4">
-                    <Link to="/register" onClick={() => setIsMobileMenuOpen(false)} className="w-full bg-accent py-5 text-center text-[10px] font-black uppercase tracking-[0.4em] text-surface rounded-[2rem] shadow-2xl shadow-accent/40 font-bold">Join Expedition</Link>
-                    <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="w-full bg-white/5 py-5 text-center text-[10px] font-black uppercase tracking-[0.4em] rounded-[2rem] border border-white/5 text-text-primary hover:bg-white/10 transition-all">Secure Vantage</Link>
+                    <Link 
+                      to="/register" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="w-full bg-accent py-[14px] text-center text-[10px] font-black uppercase tracking-[0.4em] text-surface rounded-2xl shadow-2xl shadow-accent/20 font-bold"
+                    >
+                      Join Expedition
+                    </Link>
+                    <Link 
+                      to="/login" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="w-full bg-white/5 py-[14px] text-center text-[10px] font-black uppercase tracking-[0.4em] rounded-2xl border border-white/5 text-text-primary hover:bg-white/10 transition-all font-bold"
+                    >
+                      LogIn Vantage
+                    </Link>
                   </div>
                )}
             </div>
