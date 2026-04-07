@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Calendar, Compass, ArrowDown } from 'lucide-react';
-import heroPoster from '../../../assets/hero/hunza_valley_hero_1775421507878.png';
+import img1 from '../../../assets/hero/hunza_valley_hero_1775421507878.png';
+import img2 from '../../../assets/hero/skardu_mountains_hero_1775421532625.png';
+import img3 from '../../../assets/hero/badshahi_mosque_hero_1775421551697.png';
+import img4 from '../../../assets/hero/attabad_lake_hero_1775421576513.png';
+import img5 from '../../../assets/hero/deosai_plains_hero_1775421593918.png';
 
 const images = [
-    { url: '/src/assets/hero/hunza_valley_hero_1775421507878.png', title: 'Hunza Valley' },
-    { url: '/src/assets/hero/skardu_mountains_hero_1775421532625.png', title: 'Skardu Mountains' },
-    { url: '/src/assets/hero/badshahi_mosque_hero_1775421551697.png', title: 'Badshahi Mosque' },
-    { url: '/src/assets/hero/attabad_lake_hero_1775421576513.png', title: 'Attabad Lake' },
-    { url: '/src/assets/hero/deosai_plains_hero_1775421593918.png', title: 'Deosai Plains' },
+    { url: img1, title: 'Hunza Valley' },
+    { url: img2, title: 'Skardu Mountains' },
+    { url: img3, title: 'Badshahi Mosque' },
+    { url: img4, title: 'Attabad Lake' },
+    { url: img5, title: 'Deosai Plains' },
 ];
 
 const Hero = () => {
