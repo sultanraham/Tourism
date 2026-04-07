@@ -141,32 +141,79 @@ const Navbar = () => {
 
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="fixed inset-0 z-[110] bg-surface flex flex-col">
-            <div className="h-[80px] px-6 flex items-center justify-between border-b border-white/5">
-              <div className="flex items-baseline gap-1.5 translate-y-0.5">
-                <span className="font-display text-2xl tracking-[0.1em] text-accent leading-none font-medium">TOUR<span className="italic">ISM</span></span>
-                <span className="font-heading text-[10px] tracking-[0.1em] text-primary-light font-black uppercase">PK</span>
-              </div>
-              <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 bg-white/5 rounded-lg text-text-primary transition-colors"><X size={24} /></button>
+          <motion.div 
+            initial={{ x: '100%', opacity: 0 }} 
+            animate={{ x: 0, opacity: 1 }} 
+            exit={{ x: '100%', opacity: 0 }} 
+            transition={{ type: 'spring', damping: 30, stiffness: 200 }} 
+            className="fixed inset-0 z-[110] bg-surface/98 backdrop-blur-3xl flex flex-col shadow-2xl"
+          >
+            {/* Elite Mobile Header */}
+            <div className="h-[90px] px-8 flex items-center justify-between border-b border-white/5">
+              <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-baseline gap-1.5 translate-y-0.5">
+                <span className="font-display text-2xl tracking-[0.1em] text-accent leading-none font-medium">TOUR<span className="text-text-primary">ISM</span></span>
+                <span className="font-heading text-[10px] tracking-[0.1em] text-primary-light font-black uppercase opacity-40">PK</span>
+              </Link>
+              <button 
+                onClick={() => setIsMobileMenuOpen(false)} 
+                className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-full text-text-primary hover:text-accent transition-all shadow-xl"
+              >
+                <X size={20} />
+              </button>
             </div>
             
-            <div className="flex-grow overflow-y-auto px-6 py-10 flex flex-col gap-6">
-              {navLinks.map((link) => (
-                <Link key={link.name} to={link.path} className="font-display text-4xl uppercase tracking-tighter text-text-primary">{link.name}</Link>
-              ))}
-              {isAdmin && <Link to="/admin" className="font-display text-4xl uppercase tracking-tighter text-accent italic">Admin Portal</Link>}
+            <div className="flex-grow overflow-y-auto px-8 py-12 custom-scrollbar">
+              <div className="flex flex-col gap-12">
+                {isAuthenticated && (
+                  <div className="mb-4 pb-12 border-b border-white/5">
+                    <div className="flex items-center gap-6">
+                      <div className="w-20 h-20 rounded-full border-2 border-accent/20 p-1 bg-surface-3 shadow-2xl">
+                        <img 
+                          src={profile?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile?.email || 'user'}`} 
+                          alt="Avatar" 
+                          className="w-full h-full rounded-full object-cover"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-accent">Voyager Status</p>
+                        <h3 className="text-2xl font-display text-text-primary lowercase tracking-tight">{profile?.full_name || 'Active Voyager'}</h3>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex flex-col gap-10">
+                  <span className="text-[10px] font-black uppercase tracking-[0.6em] text-text-muted/30 ml-1 mb-2">Platform Protocol</span>
+                  {navLinks.map((link, idx) => (
+                    <motion.div key={link.name} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.1 }}>
+                      <Link 
+                        to={link.path} 
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={`font-display text-5xl uppercase tracking-tighter transition-colors block ${pathname === link.path ? 'text-accent' : 'text-text-primary hover:text-accent'}`}
+                      >
+                        {link.name}
+                      </Link>
+                    </motion.div>
+                  ))}
+                  {isAdmin && (
+                    <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)} className="font-display text-5xl uppercase tracking-tighter text-accent italic mt-10 border-t border-white/5 pt-10 flex items-center gap-4">
+                      Admin Portal <ChevronRight size={32} />
+                    </Link>
+                  )}
+                </div>
+              </div>
             </div>
 
-            <div className="p-6 border-t border-white/5 bg-surface-2">
+            <div className="p-8 border-t border-white/5 bg-surface-2/40 backdrop-blur-2xl">
                {isAuthenticated ? (
-                  <div className="grid grid-cols-2 gap-4">
-                    <Link to="/settings" className="bg-white/5 py-4 text-center text-[10px] font-bold uppercase tracking-[0.2em] rounded-xl border border-white/5">Settings</Link>
-                    <button onClick={logout} className="bg-danger/10 py-4 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-danger rounded-xl border border-danger/10">Logout</button>
+                  <div className="flex flex-col gap-4">
+                    <Link to="/settings" onClick={() => setIsMobileMenuOpen(false)} className="w-full bg-surface-3 py-5 text-center text-[10px] font-black uppercase tracking-[0.4em] rounded-[2rem] border border-white/5 text-text-primary hover:bg-white/5 transition-all shadow-xl">Voyager Settings</Link>
+                    <button onClick={() => { logout(); setIsMobileMenuOpen(false); }} className="w-full bg-danger/5 py-5 text-center text-[10px] font-black uppercase tracking-[0.4em] text-danger rounded-[2rem] border border-danger/10 hover:bg-danger/10 transition-all font-bold">Manifest Logout</button>
                   </div>
                ) : (
-                  <div className="grid grid-cols-2 gap-4">
-                    <Link to="/login" className="bg-white/5 py-4 text-center text-[10px] font-bold uppercase tracking-[0.2em] rounded-xl border border-white/5 text-text-primary">Log In</Link>
-                    <Link to="/register" className="bg-accent py-4 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-surface rounded-xl">Join Now</Link>
+                  <div className="flex flex-col gap-4">
+                    <Link to="/register" onClick={() => setIsMobileMenuOpen(false)} className="w-full bg-accent py-5 text-center text-[10px] font-black uppercase tracking-[0.4em] text-surface rounded-[2rem] shadow-2xl shadow-accent/40 font-bold">Join Expedition</Link>
+                    <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="w-full bg-white/5 py-5 text-center text-[10px] font-black uppercase tracking-[0.4em] rounded-[2rem] border border-white/5 text-text-primary hover:bg-white/10 transition-all">Secure Vantage</Link>
                   </div>
                )}
             </div>
