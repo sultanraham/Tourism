@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Calendar, Compass, ArrowDown } from 'lucide-react';
+import { supabase } from '../../../lib/supabase';
 import img1 from '../../../assets/hero/hunza_valley_hero_1775421507878.png';
 import img2 from '../../../assets/hero/skardu_mountains_hero_1775421532625.png';
 import img3 from '../../../assets/hero/badshahi_mosque_hero_1775421551697.png';
@@ -17,12 +18,27 @@ const images = [
 
 const Hero = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [destCount, setDestCount] = useState(220);
 
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % images.length);
         }, 8000); // 8 seconds per slide for a cinematic feel
         return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        const fetchCount = async () => {
+            try {
+                const { count, error } = await supabase
+                    .from('destinations')
+                    .select('*', { count: 'exact', head: true });
+                if (!error && count) setDestCount(count);
+            } catch (err) {
+                console.error("Counter fetch failed", err);
+            }
+        };
+        fetchCount();
     }, []);
 
     const popularLinks = ['Hunza', 'Skardu', 'Lahore', 'Swat', 'Fairy Meadows'];
@@ -68,13 +84,13 @@ const Hero = () => {
                         ✦ Discover Pakistan's Hidden Gems
                     </span>
                     
-                    <h1 className="font-display text-4xl md:text-6xl lg:text-8xl text-text-primary leading-[0.9] mb-8 max-w-5xl">
-                        <span className="block whitespace-nowrap">Where Every Journey</span>
-                        <span className="block italic text-accent mt-2">Tells a Story</span>
+                    <h1 className="font-heading font-normal text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-text-primary leading-[1.1] md:leading-[1.1] mb-8 max-w-4xl uppercase tracking-tight">
+                        <span className="block">Where Every Journey</span>
+                        <span className="block italic text-accent">Tells a Story</span>
                     </h1>
                     
                     <p className="text-text-muted text-sm md:text-lg font-body max-w-2xl mb-12 opacity-80">
-                        Explore 220+ breathtaking destinations across Pakistan — <br className="hidden md:block" />
+                        Explore {destCount}+ breathtaking destinations across Pakistan — <br className="hidden md:block" />
                         from the rooftop of the world to ancient civilizations.
                     </p>
 

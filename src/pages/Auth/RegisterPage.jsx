@@ -41,8 +41,8 @@ const RegisterPage = () => {
                 className="relative z-10 w-full max-w-[550px]"
             >
                 <div className="text-center mb-10">
-                     <span className="text-accent font-heading text-[10px] uppercase tracking-[0.4em] mb-4 inline-block">Join our Community</span>
-                     <h1 className="font-display text-5xl md:text-6xl text-text-primary">Become a <span className="italic text-accent">Voyager</span></h1>
+                     <span className="text-accent font-bold text-[10px] uppercase tracking-[0.4em] mb-4 inline-block">Neural Registration</span>
+                     <h1 className="font-heading text-5xl md:text-6xl text-text-primary font-black tracking-tight leading-none uppercase">Become a <span className="italic text-accent">Voyager</span></h1>
                 </div>
 
                 <div className="bg-surface-2/80 backdrop-blur-2xl p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">

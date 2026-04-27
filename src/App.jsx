@@ -66,7 +66,7 @@ function App() {
               <Route path="/hotels/:slug" element={<PrivateRoute><HotelDetail /></PrivateRoute>} />
               <Route path="/restaurants" element={<PrivateRoute><RestaurantsPage /></PrivateRoute>} />
               <Route path="/restaurants/:slug" element={<PrivateRoute><RestaurantDetail /></PrivateRoute>} />
-              <Route path="/plan" element={<PrivateRoute><ItineraryPlannerPage /></PrivateRoute>} />
+              <Route path="/planner" element={<PrivateRoute><ItineraryPlannerPage /></PrivateRoute>} />
               <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
               <Route path="/admin" element={<AdminRoute><AdminPortal /></AdminRoute>} />
 

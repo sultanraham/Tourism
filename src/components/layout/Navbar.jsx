@@ -36,20 +36,25 @@ const Navbar = () => {
     { name: 'Explore', path: '/destinations' },
     { name: 'Hotels', path: '/hotels' },
     { name: 'Restaurants', path: '/restaurants' },
-    { name: 'Plan a Trip', path: '/plan' },
+    { name: 'Plan a Trip', path: '/planner' },
   ];
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ease-in-out ${isScrolled ? 'h-[70px] bg-surface/90 backdrop-blur-xl border-b border-white/5' : 'h-[110px] bg-gradient-to-b from-surface/80 to-transparent'}`}>
-        <div className={`max-w-[1440px] mx-auto h-full px-6 lg:px-12 flex items-center justify-between gap-8 transition-all duration-700 ${!isScrolled ? '-translate-y-4' : 'translate-y-0'}`}>
+      <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ease-in-out overflow-hidden ${isScrolled ? 'h-[75px] bg-surface/40 backdrop-blur-3xl border-b border-white/10' : 'h-[100px] bg-gradient-to-b from-surface/60 to-transparent'}`}>
+        {/* Mirror Reflection Effect Layer */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.02] via-transparent to-white/[0.05] pointer-events-none" />
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        
+        <div className={`max-w-[1440px] mx-auto h-full px-6 lg:px-12 flex items-center justify-between gap-8 transition-all duration-700 relative z-10 ${!isScrolled ? 'translate-y-0' : 'translate-y-0'}`}>
           
           {/* LEFT: LOGO */}
           <Link to="/" className="shrink-0 flex items-center gap-4 group">
-            <div className="w-10 h-10 rounded-xl overflow-hidden shadow-2xl transition-transform duration-700 group-hover:rotate-12 border border-white/10 shrink-0">
-                <img src="/favicon.png" alt="Tourism PK Logo" className="w-full h-full object-cover" onError={(e) => e.target.src = 'https://img.icons8.com/ios-filled/50/d4a017/mountain.png'} />
+            <div className="w-10 h-10 rounded-lg overflow-hidden shadow-2xl transition-all duration-700 group-hover:scale-110 border border-white/10 shrink-0 relative">
+                <div className="absolute inset-0 bg-gradient-to-tr from-accent/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <img src="/logo.png" alt="Tourism PK Logo" className="w-full h-full object-cover" onError={(e) => e.target.src = 'https://img.icons8.com/ios-filled/50/d4a017/mountain.png'} />
             </div>
-            <div className="flex items-baseline gap-1.5 translate-y-0.5">
+            <div className="flex items-baseline gap-1.5">
               <span className="font-display text-2xl tracking-[0.1em] text-text-primary group-hover:text-accent transition-colors leading-none font-medium">TOUR<span className="italic">ISM</span></span>
               <span className="font-heading text-[10px] tracking-[0.15em] text-primary-light font-black uppercase">PK</span>
             </div>
@@ -139,110 +144,114 @@ const Navbar = () => {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div 
-            initial={{ x: '100%', opacity: 0 }} 
-            animate={{ x: 0, opacity: 1 }} 
-            exit={{ x: '100%', opacity: 0 }} 
-            transition={{ type: 'spring', damping: 30, stiffness: 200 }} 
-            className="fixed inset-0 z-[110] bg-surface/98 backdrop-blur-3xl flex flex-col shadow-2xl"
+  <AnimatePresence>
+    {isMobileMenuOpen && (
+      <motion.div 
+        initial={{ y: '-100%', opacity: 0 }} 
+        animate={{ y: 0, opacity: 1 }} 
+        exit={{ y: '-100%', opacity: 0 }} 
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }} 
+        className="fixed inset-0 z-[110] bg-surface/40 backdrop-blur-[50px] flex flex-col shadow-2xl overflow-hidden"
+      >
+        {/* Mirror Reflection Overlay for Mobile */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] via-transparent to-transparent pointer-events-none" />
+        
+        {/* Elite Mobile Header */}
+        <div className="h-[90px] px-8 flex items-center justify-between border-b border-white/10 relative z-10">
+          <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-baseline gap-1.5 translate-y-0.5">
+            <span className="font-display text-2xl tracking-[0.1em] text-accent leading-none font-medium">TOUR<span className="text-text-primary">ISM</span></span>
+            <span className="font-heading text-[10px] tracking-[0.1em] text-primary-light font-black uppercase opacity-40">PK</span>
+          </Link>
+          <button 
+            onClick={() => setIsMobileMenuOpen(false)} 
+            className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-full text-text-primary hover:text-accent transition-all shadow-xl"
           >
-            {/* Elite Mobile Header */}
-            <div className="h-[90px] px-8 flex items-center justify-between border-b border-white/5">
-              <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-baseline gap-1.5 translate-y-0.5">
-                <span className="font-display text-2xl tracking-[0.1em] text-accent leading-none font-medium">TOUR<span className="text-text-primary">ISM</span></span>
-                <span className="font-heading text-[10px] tracking-[0.1em] text-primary-light font-black uppercase opacity-40">PK</span>
-              </Link>
-              <button 
-                onClick={() => setIsMobileMenuOpen(false)} 
-                className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-full text-text-primary hover:text-accent transition-all shadow-xl"
-              >
-                <X size={20} />
-              </button>
-            </div>
-            
-            <div className="flex-grow overflow-y-auto px-8 py-12 custom-scrollbar">
-              <div className="flex flex-col gap-12">
-                {isAuthenticated && (
-                  <div className="mb-4 pb-12 border-b border-white/5">
-                    <div className="flex items-center gap-6">
-                      <div className="w-20 h-20 rounded-full border-2 border-accent/20 p-1 bg-surface-3 shadow-2xl">
-                        <img 
-                          src={profile?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile?.email || 'user'}`} 
-                          alt="Avatar" 
-                          className="w-full h-full rounded-full object-cover"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-accent">Voyager Status</p>
-                        <h3 className="text-2xl font-display text-text-primary lowercase tracking-tight">{profile?.full_name || 'Active Voyager'}</h3>
-                      </div>
-                    </div>
+            <X size={20} />
+          </button>
+        </div>
+        
+        <div className="flex-grow overflow-y-auto px-8 py-12 custom-scrollbar relative z-10">
+          <div className="flex flex-col gap-12">
+            {isAuthenticated && (
+              <div className="mb-4 pb-12 border-b border-white/10">
+                <div className="flex items-center gap-6">
+                  <div className="w-20 h-20 rounded-full border-2 border-accent/20 p-1 bg-surface-3 shadow-2xl relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent pointer-events-none" />
+                    <img 
+                      src={profile?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile?.email || 'user'}`} 
+                      alt="Avatar" 
+                      className="w-full h-full rounded-full object-cover"
+                    />
                   </div>
-                )}
-
-                <div className="flex flex-col gap-10">
-                  <span className="text-[10px] font-black uppercase tracking-[0.6em] text-text-muted/30 ml-1 mb-2">Platform Protocol</span>
-                  {navLinks.map((link, idx) => (
-                    <motion.div key={link.name} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.1 }}>
-                      <Link 
-                        to={link.path} 
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={`font-display text-5xl uppercase tracking-tighter transition-colors block ${pathname === link.path ? 'text-accent' : 'text-text-primary hover:text-accent'}`}
-                      >
-                        {link.name}
-                      </Link>
-                    </motion.div>
-                  ))}
-                  {isAdmin && (
-                    <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)} className="font-display text-5xl uppercase tracking-tighter text-accent italic mt-10 border-t border-white/5 pt-10 flex items-center gap-4">
-                      Admin Portal <ChevronRight size={32} />
-                    </Link>
-                  )}
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-accent">Voyager Status</p>
+                    <h3 className="text-2xl font-display text-text-primary lowercase tracking-tight">{profile?.full_name || 'Active Voyager'}</h3>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            <div className="p-8 border-t border-white/5 bg-surface-2/40 backdrop-blur-2xl">
-               {isAuthenticated ? (
-                  <div className="flex flex-col gap-4">
-                    <Link 
-                      to="/settings" 
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="w-full bg-surface-3 py-[14px] text-center text-[10px] font-black uppercase tracking-[0.4em] rounded-2xl border border-white/5 text-text-primary hover:bg-white/5 transition-all shadow-xl"
-                    >
-                      Protocol Settings
-                    </Link>
-                    <button 
-                      onClick={() => { logout(); setIsMobileMenuOpen(false); }}
-                      className="w-full bg-danger/5 py-[14px] text-center text-[10px] font-black uppercase tracking-[0.4em] text-danger rounded-2xl border border-danger/10 hover:bg-danger/10 transition-all font-bold"
-                    >
-                      Sync Logout
-                    </button>
-                  </div>
-               ) : (
-                  <div className="flex flex-col gap-4">
-                    <Link 
-                      to="/register" 
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="w-full bg-accent py-[14px] text-center text-[10px] font-black uppercase tracking-[0.4em] text-surface rounded-2xl shadow-2xl shadow-accent/20 font-bold"
-                    >
-                      Join Expedition
-                    </Link>
-                    <Link 
-                      to="/login" 
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="w-full bg-white/5 py-[14px] text-center text-[10px] font-black uppercase tracking-[0.4em] rounded-2xl border border-white/5 text-text-primary hover:bg-white/10 transition-all font-bold"
-                    >
-                      LogIn Vantage
-                    </Link>
-                  </div>
-               )}
+            <div className="flex flex-col gap-8">
+              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-text-muted/30 ml-1 mb-2">Platform Protocol</span>
+              {navLinks.map((link, idx) => (
+                <motion.div key={link.name} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.1 }}>
+                  <Link 
+                    to={link.path} 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`font-display text-5xl uppercase tracking-tighter transition-all block ${pathname === link.path ? 'text-accent pl-4 border-l-4 border-accent' : 'text-text-primary hover:text-accent hover:pl-4'}`}
+                  >
+                    {link.name}
+                  </Link>
+                </motion.div>
+              ))}
+              {isAdmin && (
+                <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)} className="font-display text-5xl uppercase tracking-tighter text-accent italic mt-6 border-t border-white/10 pt-10 flex items-center gap-4">
+                  Admin Portal <ChevronRight size={32} />
+                </Link>
+              )}
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+
+        <div className="p-8 border-t border-white/10 bg-white/[0.02] backdrop-blur-3xl relative z-10">
+           {isAuthenticated ? (
+              <div className="flex flex-col gap-4">
+                <Link 
+                  to="/settings" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full bg-white/5 py-[16px] text-center text-[10px] font-black uppercase tracking-[0.4em] rounded-xl border border-white/10 text-text-primary hover:bg-white/10 transition-all shadow-xl"
+                >
+                  Protocol Settings
+                </Link>
+                <button 
+                  onClick={() => { logout(); setIsMobileMenuOpen(false); }}
+                  className="w-full bg-danger/5 py-[16px] text-center text-[10px] font-black uppercase tracking-[0.4em] text-danger rounded-xl border border-danger/10 hover:bg-danger/10 transition-all"
+                >
+                  Sync Logout
+                </button>
+              </div>
+           ) : (
+              <div className="flex flex-col gap-4">
+                <Link 
+                  to="/register" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full bg-accent py-[16px] text-center text-[10px] font-black uppercase tracking-[0.4em] text-surface rounded-xl shadow-2xl shadow-accent/20"
+                >
+                  Join Expedition
+                </Link>
+                <Link 
+                  to="/login" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full bg-white/5 py-[16px] text-center text-[10px] font-black uppercase tracking-[0.4em] rounded-xl border border-white/10 text-text-primary hover:bg-white/10 transition-all"
+                >
+                  LogIn Vantage
+                </Link>
+              </div>
+           )}
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
     </>
   );
 };

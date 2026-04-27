@@ -63,7 +63,7 @@ const Footer = () => {
             <Link to="/" className="inline-flex flex-col mb-8 group">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-accent/20 p-1 group-hover:border-accent/40 shadow-xl shadow-accent/5 overflow-hidden">
-                        <img src="/favicon.png" alt="Tourism PK" className="w-full h-full object-contain" />
+                        <img src="/logo.png" alt="Tourism PK" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex flex-col gap-0">
                         <span className="font-display text-2xl tracking-[0.2em] text-accent leading-none">TOURISM</span>
@@ -81,7 +81,7 @@ const Footer = () => {
           {/* Link Columns */}
           {footerLinks.map((col) => (
             <div key={col.title}>
-              <h4 className="font-heading text-xs uppercase tracking-[0.2em] text-text-primary mb-8 font-bold text-accent">{col.title}</h4>
+              <h4 className="font-heading text-xs uppercase tracking-[0.2em] mb-8 font-bold text-accent">{col.title}</h4>
               <ul className="space-y-4">
                 {col.links.map((link) => (
                   <li key={link.name}>

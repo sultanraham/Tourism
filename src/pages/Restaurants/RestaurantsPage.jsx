@@ -7,6 +7,7 @@ import SkeletonCard from '../../components/common/SkeletonCard';
 
 import { useQuery } from '@tanstack/react-query';
 import { dataService } from '../../services/data.service';
+import { useFilterStore } from '../../stores/filter.store';
 
 const RestaurantsPage = () => {
     const { activeFilters } = useFilterStore();

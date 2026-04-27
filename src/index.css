@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=PT+Sans:wght@400;700&family=Lustria&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Teko:wght@300;400;500;600;700&family=Tektur:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,10 +6,11 @@
 
 :root {
   /* Fonts */
-  --font-display: 'Playfair Display', serif;
-  --font-heading: 'Outfit', sans-serif;
+  --font-display: 'Lustria', serif;
+  --font-heading: 'Lustria', serif;
   --font-body: 'Inter', sans-serif;
-  --font-label: 'Montserrat', sans-serif;
+  --font-label: 'PT Sans', sans-serif;
+  --font-bold: 'PT Sans', sans-serif;
 
   /* Colors */
   --primary:        #1B4332;
@@ -65,6 +66,15 @@ body {
   font-family: var(--font-body);
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+/* Global Typography Enforcement */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display) !important;
+}
+
+b, strong, .font-bold, .font-semibold {
+  font-family: var(--font-bold) !important;
 }
 
 @layer components {
@@ -277,6 +287,6 @@ body {
 
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-  .scroll-hide::-webkit-scrollbar { display: none; }
-  .scroll-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .scroll-hide::-webkit-scrollbar, .no-scrollbar::-webkit-scrollbar { display: none; }
+  .scroll-hide, .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }

@@ -39,8 +39,8 @@ const LoginPage = () => {
                 className="relative z-10 w-full max-w-[500px]"
             >
                 <div className="text-center mb-10">
-                     <span className="text-accent font-heading text-[10px] uppercase tracking-[0.4em] mb-4 inline-block">Welcome Back</span>
-                     <h1 className="font-display text-5xl text-text-primary">Journal Your <span className="italic text-accent">Journeys</span></h1>
+                     <span className="text-accent font-bold text-[10px] uppercase tracking-[0.4em] mb-4 inline-block">Security Terminal</span>
+                     <h1 className="font-heading text-5xl text-text-primary font-black tracking-tight leading-none uppercase">Journal Your <span className="italic text-accent">Journeys</span></h1>
                 </div>
 
                 <div className="bg-surface-2/80 backdrop-blur-2xl p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">

@@ -9,10 +9,10 @@ const StatsBar = () => {
     const { data: restCount = 0 } = useQuery({ queryKey: ['count_r'], queryFn: () => dataService.getRestaurants().then(r => r.length) });
 
     const stats = [
-        { label: 'Destinations', value: 214 + destCount, suffix: '+' },
-        { label: 'Luxury Stays', value: 45 + hotelCount, suffix: '+' },
-        { label: 'Restaurants', value: 1197 + restCount, suffix: '+' },
-        { label: 'Avg Rating', value: 4.8, suffix: '★', isFloat: true },
+        { label: 'Destinations', value: destCount, suffix: '+' },
+        { label: 'Luxury Stays', value: hotelCount, suffix: '+' },
+        { label: 'Restaurants', value: restCount, suffix: '+' },
+        { label: 'Avg Rating', value: 4.9, suffix: '★', isFloat: true },
     ];
 
   return (

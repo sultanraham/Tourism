@@ -9,7 +9,7 @@ class DataService {
       .from('destinations')
       .select('*')
       .order('id', { ascending: true });
-    
+
     if (error) throw error;
     return data;
   }
@@ -20,7 +20,7 @@ class DataService {
       .select('*')
       .eq('slug', slug)
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -30,7 +30,7 @@ class DataService {
       .from('destinations')
       .insert([destination])
       .select();
-    
+
     if (error) throw error;
     return data[0];
   }
@@ -43,7 +43,7 @@ class DataService {
       .from('hotels')
       .select('*')
       .order('id', { ascending: true });
-    
+
     if (error) throw error;
     return data;
   }
@@ -54,7 +54,7 @@ class DataService {
       .select('*')
       .eq('slug', slug)
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -64,7 +64,7 @@ class DataService {
       .from('hotels')
       .insert([hotel])
       .select();
-    
+
     if (error) throw error;
     return data[0];
   }
@@ -77,7 +77,7 @@ class DataService {
       .from('restaurants')
       .select('*')
       .order('id', { ascending: true });
-    
+
     if (error) throw error;
     return data;
   }
@@ -88,7 +88,7 @@ class DataService {
       .select('*')
       .eq('slug', slug)
       .single();
-    
+
     if (error) throw error;
     return data;
   }
@@ -98,7 +98,7 @@ class DataService {
       .from('restaurants')
       .insert([restaurant])
       .select();
-    
+
     if (error) throw error;
     return data[0];
   }
@@ -112,7 +112,7 @@ class DataService {
         .from('profiles')
         .select('id, email, role, is_blocked, blocked_until, created_at')
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       return data || [];
     } catch (e) {
@@ -127,7 +127,7 @@ class DataService {
       .update({ role })
       .eq('id', userId)
       .select('id, email, role, is_blocked, blocked_until, created_at');
-    
+
     if (error) throw error;
     return data[0];
   }
@@ -138,7 +138,7 @@ class DataService {
       .update({ is_blocked, blocked_until: null }) // Clearing timed block if permanent block is toggled
       .eq('id', userId)
       .select('id, email, role, is_blocked, blocked_until, created_at');
-    
+
     if (error) throw error;
     return data[0];
   }
@@ -146,18 +146,18 @@ class DataService {
   async updateBlockedUntil(userId, durationHours) {
     let blockedUntil = null;
     if (durationHours > 0) {
-       blockedUntil = new Date(Date.now() + durationHours * 60 * 60 * 1000).toISOString();
+      blockedUntil = new Date(Date.now() + durationHours * 60 * 60 * 1000).toISOString();
     }
 
     const { data, error } = await supabase
       .from('profiles')
-      .update({ 
-          blocked_until: blockedUntil,
-          is_blocked: false // Timed block is not a permanent block
+      .update({
+        blocked_until: blockedUntil,
+        is_blocked: false // Timed block is not a permanent block
       })
       .eq('id', userId)
       .select('id, email, role, is_blocked, blocked_until, created_at');
-    
+
     if (error) throw error;
     return data[0];
   }
@@ -165,53 +165,61 @@ class DataService {
   async uploadFile(file, bucket = 'destinations') {
     if (!file) return null;
     try {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random().toString(36).substring(7)}.${fileExt}`;
-        const filePath = `${fileName}`;
+      // Step 1: Sanitize and generate unique path
+      const fileExt = file.name.split('.').pop();
+      const timestamp = Date.now();
+      const filePath = `${timestamp}.${fileExt}`;
 
-        const { error: uploadError } = await supabase.storage
-          .from(bucket)
-          .upload(filePath, file);
+      console.log("[STORAGE DEBUG] Attempting upload:", { bucket, filePath, fileType: file.type, fileSize: file.size });
 
-        if (uploadError) {
-           if (uploadError.message.includes('Bucket not found')) {
-              throw new Error("Vault Storage Protocol Fault: Please create a 'destinations' bucket in your Supabase Storage dashboard and set it to 'Public'.");
-           }
-           throw uploadError;
-        }
+      // Step 2: Upload to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from(bucket)
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true,
+          contentType: file.type 
+        });
 
-        const { data } = supabase.storage
-          .from(bucket)
-          .getPublicUrl(filePath);
+      if (uploadError) {
+        console.error("[STORAGE DEBUG] Supabase Error:", uploadError);
+        // Special 400 handling: Often means bucket policy or project config issue
+        const errorMsg = uploadError.message || "Bad Request (400)";
+        throw new Error(`Storage Error: ${errorMsg}`);
+      }
 
-        return data.publicUrl;
+      // Step 3: Retrieve Public URL
+      const { data } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(filePath);
+
+      if (!data?.publicUrl) throw new Error("Could not generate public URL for the uploaded file.");
+
+      return data.publicUrl;
     } catch (err) {
-        // Advanced Steering: Quiet known policy errors to keep console professional
-        if (!err.message?.includes('row-level security policy')) {
-            console.error("Vault Operational Fault:", err);
-        }
-        throw err;
+      console.error("Vault Storage Operational Fault:", err);
+      throw err;
     }
   }
 
   async syncProfile(user) {
-     if (!user) return null;
-     // Ultimate Fail-Safe Flush: Minimal traffic to solve fetch errors
-     try {
-       const { data, error } = await supabase
-         .from('profiles')
-         .upsert([{ id: user.id, email: user.email }], { onConflict: 'id' })
-         .select('id, role')
-         .single();
-       
-       if (error) {
-          console.error("Profile Sync Warning:", error);
-          return { id: user.id, role: 'user' }; // Guaranteed return
-       }
-       return data;
-     } catch (e) {
-        return { id: user.id, role: 'user' }; // Absolute fail-safe
-     }
+    if (!user) return null;
+    // Ultimate Fail-Safe Flush: Minimal traffic to solve fetch errors
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .upsert([{ id: user.id, email: user.email }], { onConflict: 'id' })
+        .select('id, role')
+        .single();
+
+      if (error) {
+        console.error("Profile Sync Warning:", error);
+        return { id: user.id, role: 'user' }; // Guaranteed return
+      }
+      return data;
+    } catch (e) {
+      return { id: user.id, role: 'user' }; // Absolute fail-safe
+    }
   }
 }
 
