@@ -38,6 +38,15 @@ const DestinationsPage = () => {
         });
     }, [PLACES, activeFilters]);
 
+    // Dynamic Filter Options
+    const provinces = React.useMemo(() => {
+        return [...new Set(PLACES.map(d => d.province).filter(Boolean))].sort();
+    }, [PLACES]);
+
+    const categories = React.useMemo(() => {
+        return [...new Set(PLACES.map(d => d.category).filter(Boolean))].sort();
+    }, [PLACES]);
+
     useEffect(() => {
         const filterType = searchParams.get('filter');
         if (filterType === 'provinces' || filterType === 'categories') {
@@ -83,7 +92,7 @@ const DestinationsPage = () => {
                     
                     {/* Sidebar */}
                     <div id="filter-sidebar" className="lg:block hidden">
-                        <FilterSidebar />
+                        <FilterSidebar provinces={provinces} categories={categories} />
                     </div>
 
                     {/* Mobile Filters Toggle */}
@@ -104,7 +113,7 @@ const DestinationsPage = () => {
                                 exit={{ height: 0, opacity: 0 }}
                                 className="lg:hidden overflow-hidden mb-8"
                             >
-                                <FilterSidebar />
+                                <FilterSidebar provinces={provinces} categories={categories} />
                             </motion.div>
                         )}
                     </AnimatePresence>

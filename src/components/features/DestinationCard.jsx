@@ -105,6 +105,7 @@ const DestinationCard = ({ destination }) => {
               e.preventDefault();
               setIsFavorite(!isFavorite);
             }}
+            aria-label={isFavorite ? "Remove from wishlist" : "Add to wishlist"}
             className={`absolute top-3 right-3 sm:top-4 sm:right-4 p-2 rounded-full backdrop-blur-md transition-all z-20 ${isFavorite ? 'bg-danger text-white shadow-lg shadow-danger/20' : 'bg-black/20 hover:bg-black/40 text-text-primary'
               }`}
           >

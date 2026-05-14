@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Search, MapPin, User, Menu, X, 
     ChevronDown, ChevronRight, Hotel, Utensils,
-    ShieldCheck
+    ShieldCheck, RefreshCcw
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/auth.store';
 import { useFilterStore } from '../../stores/filter.store';
@@ -41,7 +41,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ease-in-out overflow-hidden ${isScrolled ? 'h-[75px] bg-surface/40 backdrop-blur-3xl border-b border-white/10' : 'h-[100px] bg-gradient-to-b from-surface/60 to-transparent'}`}>
+      <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ease-in-out ${isScrolled ? 'h-[75px] bg-surface/40 backdrop-blur-3xl border-b border-white/10' : 'h-[100px] bg-gradient-to-b from-surface/60 to-transparent'}`}>
         {/* Mirror Reflection Effect Layer */}
         <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.02] via-transparent to-white/[0.05] pointer-events-none" />
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
@@ -82,6 +82,7 @@ const Navbar = () => {
                 {/* Search Icon (floating glass circle) */}
                 <button 
                   onClick={() => setIsSearchOpen(true)}
+                  aria-label="Open Search Overlay"
                   className="w-10 h-10 flex items-center justify-center text-text-primary/70 hover:text-accent hover:bg-white/5 rounded-full transition-all border border-white/0 hover:border-white/10"
                 >
                   <Search size={18} />
@@ -101,17 +102,61 @@ const Navbar = () => {
                         </AnimatePresence>
 
                         <div className="group relative">
-                          <div className="w-10 h-10 rounded-full border-2 border-accent/20 p-0.5 group-hover:border-accent transition-all cursor-pointer overflow-hidden shadow-lg shadow-black/20">
+                          <button className="w-10 h-10 rounded-full border-2 border-accent/20 p-0.5 group-hover:border-accent transition-all cursor-pointer overflow-hidden shadow-lg shadow-black/20">
                             <img 
                               src={profile?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile?.email || 'user'}`} 
                               alt="Avatar" 
                               className="w-full h-full rounded-full object-cover"
                             />
-                          </div>
-                          <div className="absolute top-full right-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 w-48">
-                            <div className="bg-surface-2 border border-white/10 p-2 rounded-xl shadow-2xl backdrop-blur-xl">
-                              <Link to="/settings" className="flex items-center gap-3 px-4 py-3 text-[10px] uppercase font-bold tracking-widest text-text-muted hover:text-accent transition-all"><User size={14} /> Settings</Link>
-                              <button onClick={logout} className="w-full flex items-center gap-3 px-4 py-3 text-[10px] uppercase font-bold tracking-widest text-danger hover:bg-danger/10 transition-all rounded-lg"><X size={14} /> Logout</button>
+                          </button>
+                          
+                          {/* Premium Detailed Dropdown */}
+                          <div className="absolute top-full right-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-500 w-72 z-50">
+                            <div className="bg-surface-2/90 backdrop-blur-2xl border border-white/10 rounded-[1.5rem] shadow-[0_30px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden">
+                              
+                              {/* Header Area */}
+                              <div className="p-6 bg-white/[0.03] border-b border-white/[0.05]">
+                                <div className="flex items-center gap-4 mb-4">
+                                  <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center border border-accent/30 overflow-hidden">
+                                    <img 
+                                      src={profile?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile?.email || 'user'}`} 
+                                      alt="Profile" 
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                  <div className="overflow-hidden">
+                                    <h4 className="text-text-primary text-xs font-black uppercase tracking-widest truncate">{profile?.full_name || 'Active Voyager'}</h4>
+                                    <p className="text-[10px] text-text-muted truncate opacity-60">{user?.email}</p>
+                                  </div>
+                                </div>
+                                <div className="px-3 py-1.5 rounded-lg bg-accent/10 border border-accent/20 inline-block">
+                                  <span className="text-[8px] font-black uppercase tracking-[0.2em] text-accent">Member Since {new Date(profile?.created_at || Date.now()).getFullYear()}</span>
+                                </div>
+                              </div>
+
+                              {/* Links Area */}
+                              <div className="p-2">
+                                <Link to="/settings" className="flex items-center justify-between px-4 py-3.5 text-[10px] uppercase font-bold tracking-[0.2em] text-text-muted hover:text-accent hover:bg-white/5 rounded-xl transition-all group/link">
+                                  <span className="flex items-center gap-3"><User size={14} className="opacity-50 group-hover/link:opacity-100" /> Account Settings</span>
+                                  <ChevronRight size={12} className="opacity-0 group-hover/link:opacity-100 -translate-x-2 group-hover/link:translate-x-0 transition-all" />
+                                </Link>
+                                
+                                <Link to="/wishlist" className="flex items-center justify-between px-4 py-3.5 text-[10px] uppercase font-bold tracking-[0.2em] text-text-muted hover:text-accent hover:bg-white/5 rounded-xl transition-all group/link">
+                                  <span className="flex items-center gap-3"><Hotel size={14} className="opacity-50 group-hover/link:opacity-100" /> My Bookings</span>
+                                  <ChevronRight size={12} className="opacity-0 group-hover/link:opacity-100 -translate-x-2 group-hover/link:translate-x-0 transition-all" />
+                                </Link>
+                                
+                                <div className="h-[1px] bg-white/[0.05] my-2 mx-4" />
+                                
+                                <button 
+                                  onClick={logout} 
+                                  className="w-full flex items-center justify-between px-4 py-3.5 text-[10px] uppercase font-black tracking-[0.2em] text-danger hover:bg-danger/10 rounded-xl transition-all group/link"
+                                >
+                                  <span className="flex items-center gap-3"><X size={14} className="opacity-50 group-hover/link:opacity-100" /> End Session</span>
+                                  <RefreshCcw size={12} className="opacity-0 group-hover/link:opacity-100 rotate-180 group-hover/link:rotate-0 transition-all" />
+                                </button>
+                              </div>
+
                             </div>
                           </div>
                         </div>
@@ -125,7 +170,13 @@ const Navbar = () => {
                 </div>
              </div>
 
-             <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden text-text-primary/70 p-2 hover:bg-white/5 rounded-lg"><Menu size={24} /></button>
+             <button 
+                onClick={() => setIsMobileMenuOpen(true)} 
+                aria-label="Open Mobile Menu"
+                className="lg:hidden text-text-primary/70 p-2 hover:bg-white/5 rounded-lg"
+              >
+                <Menu size={24} />
+              </button>
           </div>
         </div>
       </nav>
@@ -198,7 +249,7 @@ const Navbar = () => {
                   <Link 
                     to={link.path} 
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`font-display text-5xl uppercase tracking-tighter transition-all block ${pathname === link.path ? 'text-accent pl-4 border-l-4 border-accent' : 'text-text-primary hover:text-accent hover:pl-4'}`}
+                    className={`font-display text-4xl uppercase tracking-tighter transition-all block ${pathname === link.path ? 'text-accent pl-4 border-l-4 border-accent' : 'text-text-primary hover:text-accent hover:pl-4'}`}
                   >
                     {link.name}
                   </Link>

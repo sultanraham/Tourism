@@ -3,16 +3,15 @@ import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { 
     MessageSquare, X, Send, Sparkles, User, 
     Minimize2, Bot, Zap, Globe, Shield, 
-    Compass, HelpCircle
+    Compass, HelpCircle, Cpu
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import useChatStore from '../../stores/chat.store';
 
 const AIChatbot = () => {
     const navigate = useNavigate();
-    const [isOpen, setIsOpen] = useState(false);
     const [input, setInput] = useState('');
-    const { messages, isStreaming, sendMessage } = useChatStore();
+    const { messages, isStreaming, sendMessage, isOpen, toggleChat } = useChatStore();
     const scrollRef = useRef(null);
 
     const quickPrompts = [
@@ -50,9 +49,10 @@ const AIChatbot = () => {
                     setIsHandingOff(true);
                     // Save to localStorage for the planner to pick up
                     localStorage.setItem('pending_trip', JSON.stringify({ city, days }));
+                    localStorage.setItem('pending_trip', JSON.stringify({ city, days }));
                     setTimeout(() => {
                         navigate('/planner');
-                        setIsOpen(false);
+                        toggleChat(false);
                         setIsHandingOff(false);
                     }, 3000);
                 }
@@ -61,7 +61,7 @@ const AIChatbot = () => {
                 if (path) {
                     setTimeout(() => {
                         navigate(path);
-                        setIsOpen(false);
+                        toggleChat(false);
                     }, 1500);
                 }
             }
@@ -77,7 +77,7 @@ const AIChatbot = () => {
                     layout
                     whileHover={{ scale: 1.05, rotate: isOpen ? 90 : 0 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => setIsOpen(!isOpen)}
+                    onClick={() => toggleChat()}
                     className={`relative w-16 h-16 rounded-2xl flex items-center justify-center shadow-[0_20px_50px_rgba(212,160,23,0.3)] transition-all duration-500 overflow-hidden ${
                         isOpen ? 'bg-surface-2 text-accent border border-white/10' : 'bg-gradient-to-tr from-accent to-accent-light text-surface'
                     }`}
@@ -125,7 +125,7 @@ const AIChatbot = () => {
                                             </div>
                                         </div>
                                         <div className="flex gap-2">
-                                            <button onClick={() => setIsOpen(false)} className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 text-text-muted hover:text-text-primary transition-all">
+                                            <button onClick={() => toggleChat(false)} className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 text-text-muted hover:text-text-primary transition-all">
                                                 <Minimize2 size={14} />
                                             </button>
                                         </div>

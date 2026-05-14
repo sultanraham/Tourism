@@ -4,9 +4,11 @@ import { useQuery } from '@tanstack/react-query';
 import { dataService } from '../../../services/data.service';
 
 const StatsBar = () => {
-    const { data: destCount = 0 } = useQuery({ queryKey: ['count_d'], queryFn: () => dataService.getDestinations().then(r => r.length) });
-    const { data: hotelCount = 0 } = useQuery({ queryKey: ['count_h'], queryFn: () => dataService.getHotels().then(r => r.length) });
-    const { data: restCount = 0 } = useQuery({ queryKey: ['count_r'], queryFn: () => dataService.getRestaurants().then(r => r.length) });
+    const { data: destCount = 0, isLoading: loadingD } = useQuery({ queryKey: ['count_d'], queryFn: () => dataService.getDestinationsCount() });
+    const { data: hotelCount = 0, isLoading: loadingH } = useQuery({ queryKey: ['count_h'], queryFn: () => dataService.getHotelsCount() });
+    const { data: restCount = 0, isLoading: loadingR } = useQuery({ queryKey: ['count_r'], queryFn: () => dataService.getRestaurantsCount() });
+
+    const isLoading = loadingD || loadingH || loadingR;
 
     const stats = [
         { label: 'Destinations', value: destCount, suffix: '+' },
@@ -21,12 +23,16 @@ const StatsBar = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16">
           {stats.map((stat, idx) => (
             <div key={idx} className="flex flex-col items-center text-center group">
-              <div className="font-accent text-4xl md:text-5xl lg:text-6xl text-accent mb-2 transition-transform group-hover:scale-110 duration-500">
-                <CountUp 
-                    end={stat.value} 
-                    suffix={stat.suffix} 
-                    duration={2500} 
-                />
+              <div className="font-accent text-4xl md:text-5xl lg:text-6xl text-accent mb-2 transition-transform group-hover:scale-110 duration-500 min-h-[1em] flex items-center justify-center">
+                {isLoading ? (
+                  <div className="w-20 h-10 bg-white/5 animate-pulse rounded-lg"></div>
+                ) : (
+                  <CountUp 
+                      end={stat.value} 
+                      suffix={stat.suffix} 
+                      duration={2500} 
+                  />
+                )}
               </div>
               <div className="font-heading text-[10px] md:text-xs uppercase tracking-[0.2em] text-text-muted">
                 {stat.label}

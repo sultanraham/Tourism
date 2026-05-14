@@ -14,6 +14,15 @@ class DataService {
     return data;
   }
 
+  async getDestinationsCount() {
+    const { count, error } = await supabase
+      .from('destinations')
+      .select('*', { count: 'exact', head: true });
+    
+    if (error) throw error;
+    return count || 0;
+  }
+
   async getDestinationBySlug(slug) {
     const { data, error } = await supabase
       .from('destinations')
@@ -48,6 +57,15 @@ class DataService {
     return data;
   }
 
+  async getHotelsCount() {
+    const { count, error } = await supabase
+      .from('hotels')
+      .select('*', { count: 'exact', head: true });
+    
+    if (error) throw error;
+    return count || 0;
+  }
+
   async getHotelBySlug(slug) {
     const { data, error } = await supabase
       .from('hotels')
@@ -80,6 +98,15 @@ class DataService {
 
     if (error) throw error;
     return data;
+  }
+
+  async getRestaurantsCount() {
+    const { count, error } = await supabase
+      .from('restaurants')
+      .select('*', { count: 'exact', head: true });
+    
+    if (error) throw error;
+    return count || 0;
   }
 
   async getRestaurantBySlug(slug) {

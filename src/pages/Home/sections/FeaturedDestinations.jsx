@@ -41,17 +41,30 @@ const FeaturedDestinations = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featured.map((dest, idx) => (
-            <motion.div
-                key={dest.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-            >
-                <DestinationCard destination={dest} />
-            </motion.div>
-          ))}
+          {isLoading ? (
+            [...Array(3)].map((_, idx) => (
+              <div key={idx} className="bg-surface-2 rounded-2xl h-[400px] animate-pulse border border-white/5 flex flex-col">
+                <div className="h-2/3 bg-white/5 rounded-t-2xl"></div>
+                <div className="p-6 space-y-4">
+                  <div className="h-4 w-1/4 bg-white/5 rounded"></div>
+                  <div className="h-6 w-3/4 bg-white/5 rounded"></div>
+                  <div className="h-4 w-full bg-white/5 rounded"></div>
+                </div>
+              </div>
+            ))
+          ) : (
+            featured.map((dest, idx) => (
+              <motion.div
+                  key={dest.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+              >
+                  <DestinationCard destination={dest} />
+              </motion.div>
+            ))
+          )}
         </div>
 
       </div>

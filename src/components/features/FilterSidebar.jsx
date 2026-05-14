@@ -2,12 +2,10 @@ import React from 'react';
 import { useFilterStore } from '../../stores/filter.store';
 import { Search, MapPin, Wind, Sparkles, Star, ChevronDown, RefreshCcw } from 'lucide-react';
 
-const PROVINCES = ['Punjab', 'Sindh', 'KPK', 'Balochistan', 'Gilgit-Baltistan', 'AJK', 'Islamabad'];
-const CATEGORIES = ['Mountains', 'Valleys', 'Historical', 'Lakes', 'Beaches', 'Religious', 'Hill Stations', 'National Park'];
 const SEASONS = ['Spring', 'Summer', 'Autumn', 'Winter', 'Year Round'];
 const DIFFICULTIES = ['Easy', 'Moderate', 'Hard'];
 
-const FilterSidebar = () => {
+const FilterSidebar = ({ provinces = [], categories = [] }) => {
     const { activeFilters, setFilter, toggleFilter, resetFilters } = useFilterStore();
 
     return (
@@ -43,7 +41,7 @@ const FilterSidebar = () => {
                         <MapPin size={12} className="text-accent" /> Province
                     </h4>
                     <div className="space-y-3">
-                        {PROVINCES.map((p) => (
+                        {provinces.map((p) => (
                             <label key={p} className="flex items-center gap-3 group cursor-pointer">
                                 <div className={`w-5 h-5 rounded border-2 transition-all flex items-center justify-center ${
                                     activeFilters.province.includes(p) ? 'bg-accent border-accent' : 'bg-surface-3 border-white/10 group-hover:border-accent/40'
@@ -69,7 +67,7 @@ const FilterSidebar = () => {
                         <Sparkles size={12} className="text-accent" /> Categories
                     </h4>
                     <div className="flex flex-wrap gap-2">
-                        {CATEGORIES.map((c) => (
+                        {categories.map((c) => (
                             <button
                                 key={c}
                                 onClick={() => toggleFilter('category', c)}
