@@ -198,104 +198,123 @@ const Navbar = () => {
   <AnimatePresence>
     {isMobileMenuOpen && (
       <motion.div 
-        initial={{ y: '-100%', opacity: 0 }} 
-        animate={{ y: 0, opacity: 1 }} 
-        exit={{ y: '-100%', opacity: 0 }} 
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }} 
-        className="fixed inset-0 z-[110] bg-surface/40 backdrop-blur-[50px] flex flex-col shadow-2xl overflow-hidden"
+        initial={{ x: '100%' }} 
+        animate={{ x: 0 }} 
+        exit={{ x: '100%' }} 
+        transition={{ type: 'spring', damping: 30, stiffness: 300 }} 
+        className="fixed inset-y-0 right-0 z-[110] w-[85%] sm:w-[400px] bg-surface/90 backdrop-blur-[50px] flex flex-col shadow-[-20px_0_80px_rgba(0,0,0,0.5)] overflow-hidden border-l border-white/5"
       >
-        {/* Mirror Reflection Overlay for Mobile */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] via-transparent to-transparent pointer-events-none" />
-        
         {/* Elite Mobile Header */}
-        <div className="h-[90px] px-8 flex items-center justify-between border-b border-white/10 relative z-10">
-          <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-baseline gap-1.5 translate-y-0.5">
-            <span className="font-display text-2xl tracking-[0.1em] text-accent leading-none font-medium">TOUR<span className="text-text-primary">ISM</span></span>
-            <span className="font-heading text-[10px] tracking-[0.1em] text-primary-light font-black uppercase opacity-40">PK</span>
+        <div className="h-[75px] px-8 flex items-center justify-between border-b border-white/5 relative z-10">
+          <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-baseline gap-1.5">
+            <span className="font-display text-xl tracking-[0.1em] text-accent leading-none font-medium">TOUR<span className="text-text-primary">ISM</span></span>
+            <span className="font-heading text-[8px] tracking-[0.1em] text-primary-light font-black uppercase opacity-40">PK</span>
           </Link>
           <button 
             onClick={() => setIsMobileMenuOpen(false)} 
-            className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-full text-text-primary hover:text-accent transition-all shadow-xl"
+            className="w-10 h-10 flex items-center justify-center bg-white/5 border border-white/10 rounded-full text-text-primary hover:text-accent transition-all"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
         
-        <div className="flex-grow overflow-y-auto px-8 py-12 custom-scrollbar relative z-10">
-          <div className="flex flex-col gap-12">
+        <div className="flex-grow overflow-y-auto px-8 py-10 custom-scrollbar relative z-10">
+          <div className="flex flex-col gap-10">
             {isAuthenticated && (
-              <div className="mb-4 pb-12 border-b border-white/10">
-                <div className="flex items-center gap-6">
-                  <div className="w-20 h-20 rounded-full border-2 border-accent/20 p-1 bg-surface-3 shadow-2xl relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent pointer-events-none" />
+              <div className="pb-8 border-b border-white/5">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl border border-accent/20 p-0.5 bg-surface-3 shadow-2xl overflow-hidden">
                     <img 
                       src={profile?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile?.email || 'user'}`} 
                       alt="Avatar" 
-                      className="w-full h-full rounded-full object-cover"
+                      className="w-full h-full rounded-[14px] object-cover"
                     />
                   </div>
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-accent">Voyager Status</p>
-                    <h3 className="text-2xl font-display text-text-primary lowercase tracking-tight">{profile?.full_name || 'Active Voyager'}</h3>
+                  <div className="space-y-0.5">
+                    <h3 className="text-sm font-black uppercase tracking-widest text-text-primary truncate max-w-[180px]">{profile?.full_name || 'Active Voyager'}</h3>
+                    <p className="text-[10px] text-text-muted font-heading uppercase tracking-widest opacity-40">Elite Member</p>
                   </div>
                 </div>
               </div>
             )}
 
-            <div className="flex flex-col gap-8">
-              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-text-muted/30 ml-1 mb-2">Platform Protocol</span>
+            {/* Main Navigation */}
+            <nav className="flex flex-col gap-1.5">
+              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-text-muted/30 mb-4">Main Exploration</span>
               {navLinks.map((link, idx) => (
-                <motion.div key={link.name} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.1 }}>
+                <motion.div key={link.name} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.05 }}>
                   <Link 
                     to={link.path} 
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`font-display text-4xl uppercase tracking-tighter transition-all block ${pathname === link.path ? 'text-accent pl-4 border-l-4 border-accent' : 'text-text-primary hover:text-accent hover:pl-4'}`}
+                    className={`group flex items-center justify-between py-4 border-b border-white/[0.03] transition-all ${pathname === link.path ? 'text-accent' : 'text-text-primary/80 hover:text-accent'}`}
                   >
-                    {link.name}
+                    <span className="font-heading text-xs uppercase font-bold tracking-[0.2em]">{link.name}</span>
+                    <ChevronRight size={14} className={`transition-transform duration-300 ${pathname === link.path ? 'translate-x-0' : '-translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100'}`} />
                   </Link>
                 </motion.div>
               ))}
-              {isAdmin && (
-                <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)} className="font-display text-5xl uppercase tracking-tighter text-accent italic mt-6 border-t border-white/10 pt-10 flex items-center gap-4">
-                  Admin Portal <ChevronRight size={32} />
-                </Link>
-              )}
+            </nav>
+
+            {/* Detailed Info Section */}
+            <div className="pt-4 flex flex-col gap-6">
+              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-text-muted/30">Connect With Us</span>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="flex items-center gap-4 p-4 bg-white/[0.02] rounded-2xl border border-white/5">
+                  <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent">
+                    <MapPin size={14} />
+                  </div>
+                  <div>
+                    <p className="text-[8px] font-black uppercase tracking-widest text-text-muted">Headquarters</p>
+                    <p className="text-[10px] text-text-primary">Islamabad, Pakistan</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 p-4 bg-white/[0.02] rounded-2xl border border-white/5">
+                  <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent">
+                    <ShieldCheck size={14} />
+                  </div>
+                  <div>
+                    <p className="text-[8px] font-black uppercase tracking-widest text-text-muted">Verified Support</p>
+                    <p className="text-[10px] text-text-primary">24/7 Concierge Service</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="p-8 border-t border-white/10 bg-white/[0.02] backdrop-blur-3xl relative z-10">
+        {/* Bottom Actions */}
+        <div className="p-8 border-t border-white/5 bg-white/[0.02]">
            {isAuthenticated ? (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3">
                 <Link 
                   to="/settings" 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full bg-white/5 py-[16px] text-center text-[10px] font-black uppercase tracking-[0.4em] rounded-xl border border-white/10 text-text-primary hover:bg-white/10 transition-all shadow-xl"
+                  className="w-full bg-white/5 py-4 text-center text-[9px] font-black uppercase tracking-[0.3em] rounded-xl border border-white/10 text-text-primary hover:bg-white/10 transition-all"
                 >
-                  Protocol Settings
+                  Account Settings
                 </Link>
                 <button 
                   onClick={() => { logout(); setIsMobileMenuOpen(false); }}
-                  className="w-full bg-danger/5 py-[16px] text-center text-[10px] font-black uppercase tracking-[0.4em] text-danger rounded-xl border border-danger/10 hover:bg-danger/10 transition-all"
+                  className="w-full bg-danger/5 py-4 text-center text-[9px] font-black uppercase tracking-[0.3em] text-danger rounded-xl border border-danger/10 hover:bg-danger/10 transition-all"
                 >
-                  Sync Logout
+                  End Session
                 </button>
               </div>
            ) : (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3">
                 <Link 
                   to="/register" 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full bg-accent py-[16px] text-center text-[10px] font-black uppercase tracking-[0.4em] text-surface rounded-xl shadow-2xl shadow-accent/20"
+                  className="w-full bg-accent py-4 text-center text-[9px] font-black uppercase tracking-[0.3em] text-surface rounded-xl shadow-lg shadow-accent/10"
                 >
                   Join Expedition
                 </Link>
                 <Link 
                   to="/login" 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full bg-white/5 py-[16px] text-center text-[10px] font-black uppercase tracking-[0.4em] rounded-xl border border-white/10 text-text-primary hover:bg-white/10 transition-all"
+                  className="w-full bg-white/5 py-4 text-center text-[9px] font-black uppercase tracking-[0.3em] rounded-xl border border-white/10 text-text-primary hover:bg-white/10 transition-all"
                 >
-                  LogIn Vantage
+                  Sign In
                 </Link>
               </div>
            )}
